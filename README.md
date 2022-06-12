@@ -16,13 +16,14 @@ Use `#mineall ?` to show help.
 * #mineall ?
 
 
-## 日本語
+
+# 日本語
 マインクラフト統合版のGameTestアドオン
 
-### 必要条件
+## 必要条件
 'GameTest Framework' を有効にする
 
-### コマンド一覧
+## コマンド一覧
 `#mineall ?` でヘルプを表示します
 
 * #mineall
