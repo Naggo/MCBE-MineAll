@@ -1,5 +1,5 @@
 # MCBE-MineAll v0.2.0
-MCBE GameTest Addon
+Minecraft Bedrock GameTest Addon
 
 ## Requirements
 Enabled 'GameTest Framework'
