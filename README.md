@@ -1,4 +1,4 @@
-# MCBE-MineAll　
+# MCBE-MineAll v0.2.0
 MCBE GameTest Addon
 
 ## commands
