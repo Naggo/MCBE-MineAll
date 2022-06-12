@@ -1,6 +1,9 @@
 # MCBE-MineAll v0.2.0
 MCBE GameTest Addon
 
+## Required
+Enabled 'GameTest Framework'
+
 ## Commands
 Use `#mineall ?` to show help.
 
