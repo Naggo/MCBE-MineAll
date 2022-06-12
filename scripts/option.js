@@ -119,7 +119,7 @@ const optionManager = world.events.beforeChat.subscribe(eventData => {
 #mineall list §7- §oShow the state of all players.§r
 #mineall on §7- §oStart MineAll.§r
 #mineall off §7- §oStop MineAll.§r
-#mineall max <maxDistance: number> §7§o- Set max distance.§r
+#mineall max <maxChains: number> §7§o- Set max chains.§r
 #mineall help §7- §oShow this message.§r`);
             break;
     
