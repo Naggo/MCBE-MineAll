@@ -1,10 +1,75 @@
 import { world, Items, ItemStack, MinecraftBlockTypes, MinecraftEnchantmentTypes, MinecraftItemTypes } from "mojang-minecraft";
-import { getIsActive, getMaxChains } from "./option";
+
+const level1PickaxeSet = new Set([
+  MinecraftItemTypes.netheritePickaxe.id,
+  MinecraftItemTypes.diamondPickaxe.id,
+  MinecraftItemTypes.ironPickaxe.id,
+  MinecraftItemTypes.stonePickaxe.id,
+  MinecraftItemTypes.woodenPickaxe.id,
+  MinecraftItemTypes.goldenPickaxe.id
+]);
+const level2PickaxeSet = new Set([
+  MinecraftItemTypes.netheritePickaxe.id,
+  MinecraftItemTypes.diamondPickaxe.id,
+  MinecraftItemTypes.ironPickaxe.id,
+  MinecraftItemTypes.stonePickaxe.id
+]);
+const level3PickaxeSet = new Set([
+  MinecraftItemTypes.netheritePickaxe.id,
+  MinecraftItemTypes.diamondPickaxe.id,
+  MinecraftItemTypes.ironPickaxe.id
+]);
+const level4PickaxeSet = new Set([
+  MinecraftItemTypes.netheritePickaxe.id,
+  MinecraftItemTypes.diamondPickaxe.id
+]);
 
 
-function getEquippedItem(player) {
-  return player.getComponent("inventory").container.getItem(player.selectedSlot);
-}
+const coalOreSet = new Set([
+  MinecraftBlockTypes.coalOre,
+  MinecraftBlockTypes.deepslateCoalOre
+]);
+const lapisOreSet = new Set([
+  MinecraftBlockTypes.lapisOre,
+  MinecraftBlockTypes.deepslateLapisOre
+]);
+const copperOreSet = new Set([
+  MinecraftBlockTypes.copperOre,
+  MinecraftBlockTypes.deepslateCopperOre
+]);
+const ironOreSet = new Set([
+  MinecraftBlockTypes.ironOre,
+  MinecraftBlockTypes.deepslateIronOre
+]);
+const goldOreSet = new Set([
+  MinecraftBlockTypes.goldOre,
+  MinecraftBlockTypes.deepslateGoldOre
+]);
+const redstoneOreSet = new Set([
+  MinecraftBlockTypes.redstoneOre,
+  MinecraftBlockTypes.litRedstoneOre,
+  MinecraftBlockTypes.deepslateRedstoneOre,
+  MinecraftBlockTypes.litDeepslateRedstoneOre
+]);
+const diamondOreSet = new Set([
+  MinecraftBlockTypes.diamoneOre,
+  MinecraftBlockTypes.deepslateDiamondOre
+]);
+const emeraldOreSet = new Set([
+  MinecraftBlockTypes.emeraldOre,
+  MinecraftBlockTypes.deepslateEmeraldOre
+]);
+const quartzOreSet = new Set([
+  MinecraftBlockTypes.quartzOre
+]);
+const netherGoldOreSet = new Set([
+  MinecraftBlockTypes.netherGoldOre
+]);
+
+
+let working = false;
+let maxDistance = 10;
+
 
 /* option:
     -1: silktouch
@@ -82,15 +147,15 @@ function dropRedstone(dimension, blockLocation, blockType, option) {
 }
 
 function dropDiamond(dimension, blockLocation, blockType, option) {
-  dropOre(dimension, blockLocation, blockType, option, MinecraftItemTypes.diamond, 1);
+  dropOre(dimension, blockLocation, blockType, option, MinecraftItemTypes.diamond, 1)
 }
 
 function dropEmerald(dimension, blockLocation, blockType, option) {
-  dropOre(dimension, blockLocation, blockType, option, MinecraftItemTypes.emerald, 1);
+  dropOre(dimension, blockLocation, blockType, option, MinecraftItemTypes.emerald, 1)
 }
 
 function dropQuartz(dimension, blockLocation, blockType, option) {
-  dropOre(dimension, blockLocation, blockType, option, MinecraftItemTypes.quartz, 1);
+  dropOre(dimension, blockLocation, blockType, option, MinecraftItemTypes.quartz, 1)
 }
 
 function dropNetherGold(dimension, blockLocation, blockType, option) {
@@ -119,16 +184,15 @@ function spreadLocation(blockLocationSet, blockLocation) {
 }
 
 function spreadMine(dimension, startBlockLocation, blockTypeSet, drop, tool) {
-  let countChains = 0;
-  let maxChains = getMaxChains();
+  let distance = 0;
   let blockLocationSet;
   let nextBlockLocationSet = new Set();
   spreadLocation(nextBlockLocationSet, startBlockLocation);
   
   let option = optionFrom(tool);
   
-  while (countChains < maxChains) {
-    countChains++;
+  while (distance < maxDistance) {
+    distance++;
     blockLocationSet = nextBlockLocationSet;
     nextBlockLocationSet = new Set();
     
@@ -145,130 +209,87 @@ function spreadMine(dimension, startBlockLocation, blockTypeSet, drop, tool) {
 }
 
 
-class OreData {
-  constructor(oreSet, pickaxeSet, drop) {
-    this.oreSet = oreSet;
-    this.pickaxeSet = pickaxeSet;
-    this.drop = drop;
-  }
-
-  testCase(blockType, tool) {
-    return this.oreSet.has(blockType) && this.pickaxeSet.has(tool.id);
-  }
-
-  launchSpread(dimension, blockLocation, tool) {
-    spreadMine(dimension, blockLocation, this.oreSet, this.drop, tool);
-  }
-}
-
-
-const level1PickaxeSet = new Set([
-  MinecraftItemTypes.netheritePickaxe.id,
-  MinecraftItemTypes.diamondPickaxe.id,
-  MinecraftItemTypes.ironPickaxe.id,
-  MinecraftItemTypes.stonePickaxe.id,
-  MinecraftItemTypes.woodenPickaxe.id,
-  MinecraftItemTypes.goldenPickaxe.id
-]);
-const level2PickaxeSet = new Set([
-  MinecraftItemTypes.netheritePickaxe.id,
-  MinecraftItemTypes.diamondPickaxe.id,
-  MinecraftItemTypes.ironPickaxe.id,
-  MinecraftItemTypes.stonePickaxe.id
-]);
-const level3PickaxeSet = new Set([
-  MinecraftItemTypes.netheritePickaxe.id,
-  MinecraftItemTypes.diamondPickaxe.id,
-  MinecraftItemTypes.ironPickaxe.id
-]);
-const level4PickaxeSet = new Set([
-  MinecraftItemTypes.netheritePickaxe.id,
-  MinecraftItemTypes.diamondPickaxe.id
-]);
-
-
-const coalOreSet = new Set([
-  MinecraftBlockTypes.coalOre,
-  MinecraftBlockTypes.deepslateCoalOre
-]);
-const lapisOreSet = new Set([
-  MinecraftBlockTypes.lapisOre,
-  MinecraftBlockTypes.deepslateLapisOre
-]);
-const copperOreSet = new Set([
-  MinecraftBlockTypes.copperOre,
-  MinecraftBlockTypes.deepslateCopperOre
-]);
-const ironOreSet = new Set([
-  MinecraftBlockTypes.ironOre,
-  MinecraftBlockTypes.deepslateIronOre
-]);
-const goldOreSet = new Set([
-  MinecraftBlockTypes.goldOre,
-  MinecraftBlockTypes.deepslateGoldOre
-]);
-const redstoneOreSet = new Set([
-  MinecraftBlockTypes.redstoneOre,
-  MinecraftBlockTypes.litRedstoneOre,
-  MinecraftBlockTypes.deepslateRedstoneOre,
-  MinecraftBlockTypes.litDeepslateRedstoneOre
-]);
-const diamondOreSet = new Set([
-  MinecraftBlockTypes.diamondOre,
-  MinecraftBlockTypes.deepslateDiamondOre
-]);
-const emeraldOreSet = new Set([
-  MinecraftBlockTypes.emeraldOre,
-  MinecraftBlockTypes.deepslateEmeraldOre
-]);
-const quartzOreSet = new Set([
-  MinecraftBlockTypes.quartzOre
-]);
-const netherGoldOreSet = new Set([
-  MinecraftBlockTypes.netherGoldOre
-]);
-
-
-const coalData = new OreData(coalOreSet, level1PickaxeSet, dropCoal);
-const lapisData = new OreData(lapisOreSet, level2PickaxeSet, dropLapis);
-const copperData = new OreData(copperOreSet, level2PickaxeSet, dropCopper);
-const ironData = new OreData(ironOreSet, level2PickaxeSet, dropIron);
-const goldData = new OreData(goldOreSet, level3PickaxeSet, dropGold);
-const redstoneData = new OreData(redstoneOreSet, level3PickaxeSet, dropRedstone);
-const diamondData = new OreData(diamondOreSet, level3PickaxeSet, dropDiamond);
-const emeraldData = new OreData(emeraldOreSet, level3PickaxeSet, dropEmerald);
-const quartzData = new OreData(quartzOreSet, level1PickaxeSet, dropQuartz);
-const netherGoldData = new OreData(netherGoldOreSet, level1PickaxeSet, dropNetherGold);
-
-
-const oreDataList = [
-  coalData,
-  lapisData,
-  copperData,
-  ironData,
-  goldData,
-  redstoneData,
-  diamondData,
-  emeraldData,
-  quartzData,
-  netherGoldData
-];
-
-
 const mineAll = world.events.blockBreak.subscribe(eventData => {
-  if (!getIsActive(eventData.player))
+  if (! working)
     return;
-  let tool = getEquippedItem(eventData.player);
+  let tool = eventData.player.getComponent("inventory").container.getItem(eventData.player.selectedSlot);
   if (tool === undefined)
     return;
   let blockLocation = eventData.block.location;
   let blockType = eventData.brokenBlockPermutation.type;
 
-  oreDataList.forEach(oreData => {
-    if (oreData.testCase(blockType, tool)) {
-      oreData.launchSpread(eventData.dimension, blockLocation, tool);
-    }
-  });
+  switch (blockType) {
+    case MinecraftBlockTypes.coalOre:
+    case MinecraftBlockTypes.deepslateCoalOre:
+      if (level1PickaxeSet.has(tool.id)) {
+        spreadMine(eventData.dimension, blockLocation, coalOreSet, dropCoal, tool)
+      }
+      break;
+    
+    case MinecraftBlockTypes.lapisOre:
+    case MinecraftBlockTypes.deepslateLapisOre:
+      if (level2PickaxeSet.has(tool.id)) {
+        spreadMine(eventData.dimension, blockLocation, lapisOreSet, dropLapis, tool)
+      }
+      break;
+    
+    case MinecraftBlockTypes.copperOre:
+    case MinecraftBlockTypes.deepslateCopperOre:
+      if (level2PickaxeSet.has(tool.id)) {
+        spreadMine(eventData.dimension, blockLocation, copperOreSet, dropCopper, tool)
+      }
+      break;
+    
+    case MinecraftBlockTypes.ironOre:
+    case MinecraftBlockTypes.deepslateIronOre:
+      if (level2PickaxeSet.has(tool.id)) {
+        spreadMine(eventData.dimension, blockLocation, ironOreSet, dropIron, tool)
+      }
+      break;
+    
+    case MinecraftBlockTypes.goldOre:
+    case MinecraftBlockTypes.deepslateGoldOre:
+      if (level3PickaxeSet.has(tool.id)) {
+        spreadMine(eventData.dimension, blockLocation, goldOreSet, dropGold, tool)
+      }
+      break;
+    
+    case MinecraftBlockTypes.redstoneOre:
+    case MinecraftBlockTypes.litRedstoneOre:
+    case MinecraftBlockTypes.deepslateRedstoneOre:
+    case MinecraftBlockTypes.litDeepslateRedstoneOre:
+      if (level3PickaxeSet.has(tool.id)) {
+        spreadMine(eventData.dimension, blockLocation, redstoneOreSet, dropRedstone, tool)
+      }
+      break;
+    
+    case MinecraftBlockTypes.diamondOre:
+    case MinecraftBlockTypes.deepslateDiamondOre:
+      if (level3PickaxeSet.has(tool.id)) {
+        spreadMine(eventData.dimension, blockLocation, diamondOreSet, dropDiamond, tool)
+      }
+      break;
+    
+    case MinecraftBlockTypes.emeraldOre:
+    case MinecraftBlockTypes.deepslateEmeraldOre:
+      if (level3PickaxeSet.has(tool.id)) {
+        spreadMine(eventData.dimension, blockLocation, emeraldOreSet, dropEmerald, tool)
+      }
+      break;
+    
+    case MinecraftBlockTypes.quartzOre:
+      if (level1PickaxeSet.has(tool.id)) {
+        spreadMine(eventData.dimension, blockLocation, quartzOreSet, dropQuartz, tool)
+      }
+      break;
+    
+    case MinecraftBlockTypes.netherGoldOre:
+      if (level1PickaxeSet.has(tool.id)) {
+        spreadMine(eventData.dimension, blockLocation, netherGoldOreSet, dropNetherGold, tool)
+      }
+      break;
+  }
+  
 
   /* tests */
   // let components = tool.getComponents()
@@ -276,3 +297,70 @@ const mineAll = world.events.blockBreak.subscribe(eventData => {
   // eventData.dimension.runCommand("say _" + names);
 
 });
+
+
+function privateLog(eventData, message) {
+  eventData.message = message;
+  // eventData.cancel = true;
+  // eventData.sender.runCommand("w @s " + message)
+  // eventData.sendToTargets = true;
+  // eventData.targets.push(eventData.sender);
+}
+
+
+const mineAllOption = world.events.beforeChat.subscribe(eventData => {
+  if (! eventData.message.startsWith("#mineall"))
+    return;
+  let optionArray = eventData.message.trim().split(" ");
+  if (optionArray.length === 1) {
+    privateLog(eventData, `§b[MineAll]§r:
+ State: ${working ? "§aON" : "§cOFF"}§r
+ maxDistance: §e${maxDistance}§r`);
+    return;
+  }
+  
+  switch (optionArray[1]) {
+    case "on":
+      working = true;
+      eventData.message = "§b[Mineall]§a ON§r";
+      break;
+    
+    case "off":
+      working = false;
+      eventData.message = "§b[MineAll]§c OFF§r";
+      break;
+    
+    case "max":
+      let number = parseInt(optionArray[2]);
+      if (isNaN(number)) {
+        privateLog(eventData, "§b[MineAll]§c Distance number is required")
+        break;
+      }
+      maxDistance = number;
+      eventData.message = `§b[MineAll]§r Set max distance: §e${number}§r`;
+      break;
+    
+    case "reset":
+      working = false;
+      maxDistance = 10;
+      eventData.message = "§b[MineAll]§r Reset option";
+      break;
+    
+    case "?":
+    case "help":
+      privateLog(eventData, `§b[MineAll]§r Help:
+#mineall §7- §oShow current states.§r
+#mineall on §7- §oStart MineAll.§r
+#mineall off §7- §oStop MineAll.§r
+#mineall max <maxDistance: number> §7§o- Set max distance.§r
+#mineall reset §7- §oReset option.§r
+#mineall help §7- §oShow this message.§r`);
+      break;
+    
+    default:
+      privateLog(eventData, `§b[MineAll]§c Unknown option: '${optionArray[1]}'`);
+  }
+});
+
+
+

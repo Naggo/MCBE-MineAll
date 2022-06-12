@@ -11,12 +11,6 @@
       },
       {
          "path" : "contents.json"
-      },
-      {
-         "path" : "scripts/main.js"
-      },
-      {
-         "path" : "scripts/option.js"
       }
    ],
    "version" : 1

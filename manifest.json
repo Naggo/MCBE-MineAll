@@ -3,7 +3,7 @@
   "header": {
     "name": "MineAll",
     "description": "MineAll Add-On",
-    "version": [ 0, 2, 0 ],
+    "version": [ 0, 1, 0 ],
     "uuid": "4490fe2d-7292-4629-9743-d9a0607dd1dd",
     "min_engine_version": [ 1, 19, 0 ]
   },
@@ -12,9 +12,9 @@
       "type": "script",
       "language": "javascript",
       "description": "MineAll GameTest",
-      "version": [ 0, 2, 0 ],
+      "version": [ 0, 1, 0 ],
       "uuid": "6bc17805-fa08-4b68-9bf4-0cbb1d3bbbe9",
-      "entry": "scripts/main.js"
+      "entry": "scripts/mineall.js"
     }
   ],
   "dependencies": [
